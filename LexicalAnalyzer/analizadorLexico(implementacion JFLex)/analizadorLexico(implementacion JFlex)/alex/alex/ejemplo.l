@@ -26,8 +26,8 @@ letra  = ([A-Z]|[a-z])
 DigitoPos = [1-9]
 Digito = ({digitoPositivo}|0)
 Ent = ({DigitoPos} {Digito}* | 0)
-PDec = . (({Digito}* {DigitoPos}) | 0)
-PExp = [eE] [\-, \+]? ({Ent} | 0)
+PDec = \. (({Digito}* {DigitoPos}) | 0)
+PExp = [eE] [\-\+]? ({Ent} | 0)
 EntNum = [\-\+]? {Ent}
 RealNum = [\-\+]? {Ent} ({PDec} | {PExp} | {PDec} {PExp})
 Variable = {letra} ({letra} | {Digito} | \_)*
@@ -89,10 +89,10 @@ Sep = \&\&
 ignorable = [\t\r\b\n]
 comentario = #[^\n]* 
 %%
-{separador}               {}
-{comentario}              {}
-{EntNum}                  {return ops.unidadEntNum();}
-{RealNum}                 {return ops.unidadRealNum();}
+{ignorable}               	{}
+{comentario}              	{}
+{EntNum}                  	{return ops.unidadEntNum();}
+{RealNum}                 	{return ops.unidadRealNum();}
 {True}						{return ops.unidadTrue();}
 {False}						{return ops.unidadFalse();}
 {Null}						{return ops.unidadNull();}
@@ -115,16 +115,38 @@ comentario = #[^\n]*
 {Var}						{return ops.unidadVar();}
 {Bool}						{return ops.unidadBool();}
 {Int}						{return ops.unidadInt();}
-{Real}						{return ops.
-{identificador}           {return ops.unidadId();}
-{numeroEntero}            {return ops.unidadEnt();}
-{numeroReal}              {return ops.unidadReal();}
-{operadorSuma}            {return ops.unidadSuma();}
-{operadorResta}           {return ops.unidadResta();}
-{operadorMultiplicacion}  {return ops.unidadMul();}
-{operadorDivision}        {return ops.unidadDiv();}
-{parentesisApertura}      {return ops.unidadPAp();}
-{parentesisCierre}        {return ops.unidadPCierre();} 
-{igual}                   {return ops.unidadIgual();} 
-{coma}                    {return ops.unidadComa();}
-[^]                       {ops.error();}  
+{Real}						{return ops.unidadReal();}
+{String}					{return ops.unidadString();}
+{Pointer}					{return ops.unidadPointer();}
+{Array}						{return ops.unidadArray();}
+{Of}						{return ops.unidadOf();}
+{Sum}						{return ops.unidadSum();}
+{Res}						{return ops.unidadRes();}
+{Mul}						{return ops.unidadMul();}
+{Div}						{return ops.unidadDiv();}
+{Mod}						{return ops.unidadMod();}
+{Asig}						{return ops.unidadAsig();}
+{Menor}						{return ops.unidadMenor();}
+{Mayor}						{return ops.unidadMayor();}
+{Ig}						{return ops.unidadIg();}
+{MayIg}						{return ops.unidadMayIg();}
+{MenIg}						{return ops.unidadMenIg();}
+{Dist}						{return ops.unidadDist();}
+{And}						{return ops.unidadAnd();}
+{Or}						{return ops.unidadOr();}
+{Not}						{return ops.unidadNot();}
+{PAp}						{return ops.unidadPAp();}
+{PCie}						{return ops.unidadPCie();}
+{CAp}						{return ops.unidadCAp();}
+{CCie}						{return ops.unidadCCie();}
+{LAp}						{return ops.unidadLAp();}
+{LCie}						{return ops.unidadLCie();}
+{Punto}						{return ops.unidadPunto();}
+{Coma}						{return ops.unidadComa();}
+{Andvers}					{return ops.unidadAndvers();}
+{Flecha}					{return ops.unidadFlecha();}
+{PunCo}						{return ops.unidadPunCo();}
+{Sep}						{return ops.unidadSep();}
+{Variable}           		{return ops.unidadVariable();}
+{LitCad}					{return ops.unidadLitCad();}                  {return ops.unidadComa();}
+[^]                       	{ops.error();}  
