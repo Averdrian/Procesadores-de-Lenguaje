@@ -1,2 +1,2 @@
 x = 4 (and (false)) + 4.05E+5 - 8E-7
-and 3 + 5 * 7 / int va real 5
+and 3 + 5 *	 7 / int va real 5
