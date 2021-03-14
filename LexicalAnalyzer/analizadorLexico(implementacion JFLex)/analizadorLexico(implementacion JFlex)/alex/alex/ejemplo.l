@@ -25,9 +25,9 @@ package alex;
 letra  = ([A-Z]|[a-z])
 DigitoPos = [1-9]
 Digito = ({DigitoPos}|0)
-Ent = ({DigitoPos} {Digito}* | 0)
-PDec = \. (({Digito}* {DigitoPos}) | 0)
-PExp = [eE] [\-\+]? ({Ent} | 0)
+Ent = ({DigitoPos} {Digito}*|0)
+PDec = \. (({Digito}* {DigitoPos})|0)
+PExp = [eE] [\-\+]? ({Ent}|0)
 EntNum = [\-\+]? {Ent}
 RealNum = [\-\+]? {Ent} ({PDec} | {PExp} | {PDec} {PExp})
 Variable = {letra} ({letra} | {Digito} | \_)*
@@ -83,10 +83,10 @@ LCie = \}
 Punto = \.
 Coma = \,
 Andvers = \&
-Flecha = \- \>
+Flecha = \-\>
 PunCo = \;
 Sep = \&\&
-ignorable = [\t\r\b\n]
+ignorable = [ \t\r\b\n]
 comentario = #[^\n]* 
 %%
 {ignorable}               	{}
