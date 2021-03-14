@@ -24,7 +24,7 @@ package alex;
 
 letra  = ([A-Z]|[a-z])
 DigitoPos = [1-9]
-Digito = ({digitoPositivo}|0)
+Digito = ({DigitoPos}|0)
 Ent = ({DigitoPos} {Digito}* | 0)
 PDec = \. (({Digito}* {DigitoPos}) | 0)
 PExp = [eE] [\-\+]? ({Ent} | 0)
@@ -74,8 +74,8 @@ Dist = \! \=
 And = and
 Or = or
 Not = not
-PAp = /(
-PCie = /)
+PAp = \(
+PCie = \)
 CAp = \[
 CCie = \]
 LAp = \{
@@ -148,5 +148,5 @@ comentario = #[^\n]*
 {PunCo}						{return ops.unidadPunCo();}
 {Sep}						{return ops.unidadSep();}
 {Variable}           		{return ops.unidadVariable();}
-{LitCad}					{return ops.unidadLitCad();}                  {return ops.unidadComa();}
+{LitCad}					{return ops.unidadLitCad();}
 [^]                       	{ops.error();}  
