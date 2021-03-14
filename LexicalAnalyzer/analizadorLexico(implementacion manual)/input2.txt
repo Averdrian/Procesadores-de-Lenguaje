@@ -1,0 +1,8 @@
+real 4
+int 4.310100001e0
+not x and true or false (4.2101 * 10.0) + a_bc not b
+x = y == 4==3/2
+4 + -54 ++ 12; ;true false ttrue = false
+
+
+5+5 + 5

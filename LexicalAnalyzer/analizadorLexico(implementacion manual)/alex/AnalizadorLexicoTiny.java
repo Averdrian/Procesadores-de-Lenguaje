@@ -287,7 +287,7 @@ private void transita(Estado sig) throws IOException {
    }
 
    public static void main(String arg[]) throws IOException {
-     Reader input = new InputStreamReader(new FileInputStream("input.txt"));
+     Reader input = new InputStreamReader(new FileInputStream("input2.txt"));
      AnalizadorLexicoTiny al = new AnalizadorLexicoTiny(input);
      UnidadLexica unidad;
      do {
