@@ -106,7 +106,6 @@ public class AnalizadorLexicoTiny {
          case REC_0:
         	 if(hayExp()) transita(Estado.REC_EXP);
         	 else if(hayPunto()) transita(Estado.REC_PUNTO);
-        	 else if (hayDigito()) error();
         	 else return unidadEntNum();
         	 break;
          case REC_ENT:
@@ -287,7 +286,7 @@ private void transita(Estado sig) throws IOException {
    }
 
    public static void main(String arg[]) throws IOException {
-     Reader input = new InputStreamReader(new FileInputStream("input2.txt"));
+     Reader input = new InputStreamReader(new FileInputStream("input.txt"));
      AnalizadorLexicoTiny al = new AnalizadorLexicoTiny(input);
      UnidadLexica unidad;
      do {
