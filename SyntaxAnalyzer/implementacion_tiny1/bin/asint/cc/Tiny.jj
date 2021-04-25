@@ -1,0 +1,95 @@
+options  {
+  STATIC=false;
+}  
+PARSER_BEGIN(AnalizadorSintacticoTinyCC)
+package asint.cc;
+
+public class AnalizadorSintacticoTinyCC {}
+PARSER_END(AnalizadorSintacticoTinyCC)
+
+  TOKEN: {<If:"if">}
+  TOKEN: {<Else:"else">}
+  TOKEN: {<Of:"of">}
+  TOKEN: {<NL:"nl">}
+  TOKEN: {<Do:"do">}
+  TOKEN: {<Or:"or">}
+  TOKEN: {<And:"and">}
+  TOKEN: {<Var:"var">}
+  TOKEN: {<Int:"int">}
+  TOKEN: {<Not:"not">}
+  TOKEN: {<New:"new">}
+  TOKEN: {<Proc:"proc">}
+  TOKEN: {<Read:"read">}
+  TOKEN: {<Type:"type">}
+  TOKEN: {<True:"true">}
+  TOKEN: {<Real:"real">}
+  TOKEN: {<Bool:"bool">}
+  TOKEN: {<Call:"call">}
+  TOKEN: {<Null:"null">}
+  TOKEN: {<Then:"then">}
+  TOKEN: {<While:"while">}
+  TOKEN: {<Write:"write">}
+  TOKEN: {<False:"false">}
+  TOKEN: {<Endif:"endif">}
+  TOKEN: {<Array:"array">}
+  TOKEN: {<Record:"record">}
+  TOKEN: {<Delete:"delete">}
+  TOKEN: {<String:"string">}
+  TOKEN: {<Pointer:"pointer">}
+  TOKEN: {<Endwhile:"endwhile">}
+  
+  TOKEN:{<#letra:["a"-"z","A"-"Z"]>}
+  TOKEN:{<#digitoPositivo:["1"-"9"]>}
+  TOKEN:{<#digito:<digitoPositivo>|"0">}
+  TOKEN:{<#parteEntera:<digitoPositivo> (<digito>)* |"0">} 
+  TOKEN:{<#parteDecimal: (<digito>)* <digitoPositivo>>}
+  TOKEN:{<#parteExponencial: ("e"|"E") ("+"|"-")? (<digitoPositivo> (<digito>)* | "0")>}
+  TOKEN:{<EntNum: (["+","-"])? <parteEntera> >}
+  TOKEN:{<RealNum: (["+","-"])? <parteEntera> ("." <parteDecimal> | <parteExponencial> | "." <parteDecimal> <parteExponencial> )>  }
+  TOKEN:{<Variable:<letra>(<letra>|<digito>|"_")*>}
+  TOKEN:{<LitCad: "\"" (~["\"", "\b", "\r", "\n"])* "\"">} 
+
+  SKIP:{<["\t"," ","\r","\b","\n"]>}  
+  SKIP:{<"#"(~["\n"])*>} 
+  
+  void Start() : {} {Prog() <EOF>} 
+  void Prog() : {} { SeccionDec() SeccionInst() }
+  void SeccionDec() : {} {Decs() "&&" | {} }
+  void Decs() : {} { Dec() ReDecs() } 
+  void ReDecs() : {} {";" Dec() ReDecs() | {} }
+  void Dec() : {} {<Var> Tipo() <Variable> | <Type> Tipo() <Variable> | <Proc> <Variable> "(" Params() ")" "{" Prog() "}" }
+  void Tipo() : {} { <Int> | <Real> | <Bool> | <String> | <Variable> | <Array> "[" <EntNum> "]" <Of> Tipo() | <Record> "{" RecordDecs() "}" | <Pointer> Tipo() }
+  void RecordDecs() : {} {RDec() ReRecordDecs()}
+  void ReRecordDecs() : {} {";" RDec() ReRecordDecs() | {} }
+  void RDec() : {} { Tipo() <Variable> }
+  void Params() : {} { Param() ReParams() | {} }
+  void ReParams() : {} { "," Param() ReParams() | {} }
+  void Param() : {} {Tipo() Ref() <Variable> }
+  void Ref() : {} { "&" | {} }
+  void SeccionInst() : {} {Insts()}
+  void Insts() : {} {Inst() ReInsts()}
+  void ReInsts() : {} {";" Inst() ReInsts() | {} }
+  void Inst() : {} {Expr0() "=" Expr0() | <If> Expr0() <Then> OpInsts() ELSE() <Endif> | <While> Expr0() <Do> OpInsts() <Endwhile> | <Read> Expr0() | <Write> Expr0() | <NL> | <New> Expr0() | <Delete> Expr0() | <Call> <Variable> "(" RParams() ")" | "{" Prog() "}" }
+  void OpInsts() : {} {Insts() | {}}
+  void ELSE() : {} {<Else> OpInsts() | {} }
+  void RParams() : {} {RPars() | {} }
+  void RPars() : {} {Expr0() ReRPars() }
+  void ReRPars() : {} { "," Expr0() ReRPars() | {} }
+  void Expr0() : {} { Expr1() ReExpr0() }
+  void ReExpr0() : {} { "+" Expr0() | "-" Expr1() | {} }
+  void Expr1() : {} { Expr2() ReExpr1() }
+  void ReExpr1() : {} { Op1() Expr2() ReExpr1() | {} }
+  void Expr2() : {} {Expr3() ReExpr2()}
+  void ReExpr2() : {} {Op2() Expr3() ReExpr2() | {} }
+  void Expr3() : {} {Expr4() ReExpr3()}
+  void ReExpr3() : {} {Op3() Expr4() | {} }
+  void Expr4() : {} {"-" Expr5() | <Not> Expr4() | Expr5()}
+  void Expr5() : {} {Expr6() ReExpr5()}
+  void ReExpr5() : {} {Op5() <Variable> ReExpr5() | "[" Expr0() "]" ReExpr5() | {} }
+  void Expr6() : {} {"*" Expr6() | Expr7() }
+  void Expr7() : {} {"(" Expr0() ")" | <Variable> | <EntNum> | <RealNum> | <True> | <False> | <Null> | <LitCad>}  
+  void Op1() : {} { <And> | <Or> }
+  void Op2() : {} { "<" | ">" | "<=" | ">=" | "==" | "!=" }
+  void Op3() : {} { "*" | "/" | "%"}
+  void Op5() : {} {"." | "->" }
+

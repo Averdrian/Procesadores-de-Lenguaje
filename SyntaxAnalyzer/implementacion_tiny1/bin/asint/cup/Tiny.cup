@@ -1,0 +1,67 @@
+package asint.cup;
+
+import java_cup.runtime.*;
+import alex.AnalizadorLexicoTiny;
+import alex.UnidadLexica;
+import errors.GestionErroresTiny;
+
+scan with {: return getScanner().next_token(); :};
+parser code {: 
+   private GestionErroresTiny errores;
+   public void syntax_error(Symbol unidadLexica) {
+     errores.errorSintactico((UnidadLexica)unidadLexica);
+   }
+:};
+init with {: 
+   errores = new GestionErroresTiny();
+   AnalizadorLexicoTiny alex = (AnalizadorLexicoTiny)getScanner();
+   alex.fijaGestionErrores(errores);
+:};
+
+
+terminal    EntNum, RealNum, Variable, LitCad, True, False, Null,
+ 			Proc, If, Then, Else, Endif, While, Do, Endwhile,
+ 			Call, Type, Record, New, Delete, Read, Write, NL, Var, 
+ 			Bool, Int, Real, String, Pointer, Array, Of, Sum, Res,
+ 			Mul, Div, Mod, Asig, Menor, Mayor, Ig, MayIg, MenIg, Dist,
+ 			And, Or, Not, PAp, PCie, CAp, CCie, LAp, LCie, Punto, Coma,
+ 			Andvers, Flecha, PunCo, Sep;
+
+non terminal    Prog, SeccionDec, Decs, Dec, Tipo, RecDecs, RDec, Params,
+				Param, SeccionInst, Insts, Inst, OpInsts, ELSE, RParams,
+				RPars, Expr0, Expr1, Expr2, Expr3, Expr4, Expr5, Expr6,
+				Expr7, Op1, Op2, Op3, Op5 ;
+				
+Prog ::= SeccionDec SeccionInst ;
+SeccionDec ::= Decs Sep | ;
+Decs ::= Decs PunCo Dec | Dec ;
+Dec ::= Var Tipo Variable | Type Tipo Variable | Proc Variable PAp Params PCie LAp Prog LCie ;
+Tipo ::= Int | Real | Bool | String | Variable | Array CAp EntNum CCie Of Tipo | Record LAp RecDecs LCie | Pointer Tipo ;                          
+RecDecs ::= RecDecs PunCo RDec | RDec ;
+RDec ::= Tipo Variable ;
+Params ::= Params Param | ;
+Param ::= Tipo Variable | Tipo Andvers Variable ;
+SeccionInst ::= Insts ;
+Insts ::= Insts PunCo Inst | Inst ;
+Inst ::= Expr0 Asig Expr0 | If Expr0 Then OpInsts ELSE Endif | While Expr0 Do OpInsts Endwhile ;
+OpInsts ::= Insts | ;
+ELSE ::= Else OpInsts | ;
+Inst ::= Read Expr0 | Write Expr0 | NL | New Expr0 | Delete Expr0 | Call Variable PAp RParams PCie | LAp Prog LCie ;
+RParams ::= RPars | ;
+RPars ::= RPars Coma Expr0 | Expr0 ;
+Expr0 ::= Expr1 Sum Expr0 | Expr1 Res Expr1 | Expr1 ;
+Expr1 ::= Expr1 Op1 Expr2 | Expr2 ;
+Expr2 ::= Expr2 Op2 Expr3 | Expr3 ;
+Expr3 ::= Expr4 Op3 Expr4 | Expr4 ;
+Expr4 ::= Res Expr5 | Not Expr4 | Expr5 ;
+Expr5 ::= Expr5 CAp Expr0 CCie | Expr5 Op5 Variable | Expr6 ;
+Expr6 ::= Mul Expr6 | Expr7 ;
+Expr7 ::= PAp Expr0 PCie | Variable | EntNum | RealNum | True | False | Null | LitCad ;
+Op1 ::= And | Or ;
+Op2 ::= Menor | Mayor | MenIg | MayIg | Ig | Dist ;
+Op3 ::= Mul | Div | Mod ;
+Op5 ::= Punto | Flecha ;
+
+
+
+
