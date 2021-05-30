@@ -12,10 +12,13 @@ public class Impresion {
 	    }
 	    
 	    private static void imprime_exp(Exp exp) {
-	        if (exp.tipo() == TNodo.NUM) {
-	            System.out.print(exp.num());
+	        if (exp.tipo() == TNodo.suma) {
+	        	imprime_exp(exp.arg0());
+	            System.out.print("+");
+	            if (exp.arg1().tipo()==)
+	            imprime_exp(exp.arg1());
 	        }
-	        else if (exp.tipo() == TNodo.ID) {
+	        else if (exp.tipo() == TNodo.resta) {
 	            System.out.print(exp.id());
 	        }
 	        else if (exp_aditiva(exp)) {
@@ -51,15 +54,6 @@ public class Impresion {
 	        System.out.print(")");
 	    }
 	    
-	    private static void imprime_op(Exp exp) {
-	        switch(exp.tipo()) {
-	            case SUMA: System.out.print("+"); break;
-	            case RESTA: System.out.print("-"); break;
-	            case MUL: System.out.print("*"); break;
-	            case DIV: System.out.print("/"); break;
-	         }
-	    }
-	    
 	    private static boolean exp_aditiva(Exp exp) {
 	        return exp.tipo() == TNodo.SUMA ||
 	               exp.tipo() == TNodo.RESTA;
@@ -92,7 +86,9 @@ public class Impresion {
 	    }
 	    
 	    private static void imprime_inst(Inst inst) {
-	    	
+	    	System.out.print(inst.variable().toString());
+	    	System.out.print("=");
+	    	imprime_exp(inst.exp());
 	    }
 	    
 	    private static void imprime_dec(Dec dec) {
@@ -116,5 +112,24 @@ public class Impresion {
 				break;
 	    	}
 	    }
+	    
+	    private static boolean exp_1(Exp exp) {
+	        return exp.tipo() == TNodo.and ||
+	               exp.tipo() == TNodo.or;
+	    }
+	    private static boolean exp_2(Exp exp) {
+	        return exp.tipo() == TNodo.menor ||
+	               exp.tipo() == TNodo.mayor ||
+	               exp.tipo() == TNodo.menor_ig ||
+	               exp.tipo() == TNodo.mayor_ig ||
+	               exp.tipo() == TNodo.ig ||
+	               exp.tipo() == TNodo.dist;
+	    }
+	    
+	    private static boolean exp_3(Exp exp) {
+	        return exp.tipo() == TNodo.mul ||
+	               exp.tipo() == TNodo.div;
+	    }
+
 
 }
