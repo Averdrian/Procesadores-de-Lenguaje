@@ -280,7 +280,7 @@ public class AnalizadorSintacticoTiny {
 		       public Decs decs() {return decs;}
 		}
 		
-		 public  class Dec  {
+		 public static class Dec  {
 		        private NombreTipo tipo;
 		        private StringLocalizado variable;
 		        public Dec(NombreTipo tipo, StringLocalizado variable) {
