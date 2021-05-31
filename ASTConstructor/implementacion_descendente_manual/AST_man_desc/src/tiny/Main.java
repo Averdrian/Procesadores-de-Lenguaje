@@ -7,6 +7,8 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import Procesamientos.Impresion;
+
 //import Procesamientos.*;
 
 public class Main {
@@ -16,8 +18,8 @@ public class Main {
      }*/
     // else {
          Prog prog = null;
-         prog = ejecuta_descendente_manual("input3.txt"); 
-      //   Impresion.imprime(prog);
+         prog = ejecuta_descendente_manual("input0.txt"); 
+         Impresion.imprime(prog);
       //   Evaluacion.evalua(prog);
      //}
    }

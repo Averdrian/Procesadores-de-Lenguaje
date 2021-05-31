@@ -349,7 +349,7 @@ public class AnalizadorSintacticoTiny {
 				this.inst = inst;
 				this.insts = insts;
 			}
-			public TNodo tipo() {return TNodo.un_inst;}
+			public TNodo tipo() {return TNodo.varias_insts;}
 			public Inst inst() {return inst;}
 			public Insts insts() {return insts;}
 		}

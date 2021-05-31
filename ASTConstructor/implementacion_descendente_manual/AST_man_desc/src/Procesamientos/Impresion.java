@@ -7,67 +7,117 @@ public class Impresion {
 	public static void imprime(Prog prog) {
 	       
 	       imprime_decs(prog.decs());
-	       System.out.println("&&");
+	       System.out.println("\n&&");
 	       imprime_insts(prog.insts());
 	    }
 	    
 	    private static void imprime_exp(Exp exp) {
-	        if (exp.tipo() == TNodo.suma) {
+	    	if (exp.tipo() == TNodo.real) {
+	        	System.out.print(exp.real());
+	        }
+	    	else if (exp.tipo() == TNodo.entero) {
+	        	System.out.print(exp.entero());
+	        }
+	    	else if (exp.tipo() == TNodo.variable) {
+	        	System.out.print(exp.variable());
+	        }
+	    	else if (exp.tipo() == TNodo.True) {
+	        	System.out.print(exp.True());
+	        }
+	    	else if (exp.tipo() == TNodo.False) {
+	        	System.out.print(exp.False());
+	        }
+	    	
+	    	else if (exp.tipo() == TNodo.suma) {
 	        	imprime_exp(exp.arg0());
 	            System.out.print("+");
-	            if (exp.arg1().tipo()==)
 	            imprime_exp(exp.arg1());
 	        }
 	        else if (exp.tipo() == TNodo.resta) {
-	            System.out.print(exp.id());
+	        	imprime_exp(exp.arg0());
+	            System.out.print("-");
+	            if (exp.tipo() == TNodo.suma || exp.tipo() == TNodo.resta) {
+	                imprime_exp_entre_parentesis(exp.arg1());
+	            }
+	            else {
+	                imprime_exp(exp.arg1());
+	            }
 	        }
-	        else if (exp_aditiva(exp)) {
+	        else if (exp_1(exp)) {
 	            imprime_exp(exp.arg0());
 	            imprime_op(exp);
-	            if (exp_aditiva(exp.arg1())) {
+	            if (exp_1(exp.arg1())|| exp.tipo() == TNodo.suma || exp.tipo() == TNodo.resta) {
 	                imprime_exp_entre_parentesis(exp.arg1());
 	            }
 	            else {
 	                imprime_exp(exp.arg1());
 	            }
 	        }
-	        else {
-	            if (exp_aditiva(exp.arg0())) {
-	                imprime_exp_entre_parentesis(exp.arg0());
-	            }
-	            else {
-	               imprime_exp(exp.arg0()); 
-	            }
+	        else if (exp_2(exp)) {
+	            imprime_exp(exp.arg0());
 	            imprime_op(exp);
-	            if (exp_aditiva(exp.arg1()) || exp_multiplicativa(exp.arg1())) {
+	            if (exp_2(exp.arg1()) || exp_1(exp.arg1())|| exp.tipo() == TNodo.suma || exp.tipo() == TNodo.resta) {
 	                imprime_exp_entre_parentesis(exp.arg1());
 	            }
 	            else {
 	                imprime_exp(exp.arg1());
 	            }
+	        }
+	        else if (exp_3(exp)) {
+	        	if (exp_3(exp.arg0()) || exp_2(exp.arg0()) || exp_1(exp.arg0())
+	    	            || exp.tipo() == TNodo.suma || exp.tipo() == TNodo.resta) {
+	    	                imprime_exp_entre_parentesis(exp.arg0());
+	    	            }
+	    	            else {
+	    	                imprime_exp(exp.arg0());
+	    	            }
+
+	            imprime_op(exp);
+	            if (exp_3(exp.arg1()) || exp_2(exp.arg1()) || exp_1(exp.arg1())
+	            || exp.tipo() == TNodo.suma || exp.tipo() == TNodo.resta) {
+	                imprime_exp_entre_parentesis(exp.arg1());
+	            }
+	            else {
+	                imprime_exp(exp.arg1());
+	            }
+	        }
+	        else if (exp.tipo() == TNodo.negativo) {
+	        	System.out.print("-");
+	            imprime_exp(exp.arg0());
+	        }
+	        else if(exp.tipo() == TNodo.not) {
+	        	System.out.print("not");
+	        	imprime_exp(exp.arg0());
 	        }
 	    }  
 	    
-	    private static void imprime_exp_entre_parentesis(Exp exp) {
+	    private static void imprime_op(Exp exp) {
+	    	switch(exp.tipo()) {
+            case and: System.out.print("and"); break;
+            case or: System.out.print("or"); break;
+            case menor: System.out.print("<"); break;
+            case mayor: System.out.print(">"); break;
+            case menor_ig: System.out.print("<="); break;
+            case mayor_ig: System.out.print(">="); break;
+            case ig: System.out.print("=="); break;
+            case dist: System.out.print("!="); break;
+            case mul: System.out.print("*"); break;
+            case div: System.out.print("/"); break;
+         }
+			
+		}
+
+		private static void imprime_exp_entre_parentesis(Exp exp) {
 	        System.out.print("(");
 	        imprime_exp(exp);
 	        System.out.print(")");
 	    }
 	    
-	    private static boolean exp_aditiva(Exp exp) {
-	        return exp.tipo() == TNodo.SUMA ||
-	               exp.tipo() == TNodo.RESTA;
-	    }
-	    private static boolean exp_multiplicativa(Exp exp) {
-	        return exp.tipo() == TNodo.MUL ||
-	               exp.tipo() == TNodo.DIV;
-	    }
-	    
 	    private static void imprime_decs(Decs decs) {
 	        if (decs.tipo() == TNodo.varias_dec) {
-	          imprime_decs(decs.decs());
+	          imprime_dec(decs.dec());
 	          System.out.println(";");
-	          imprime_dec(decs.dec());    
+	          imprime_decs(decs.decs());    
 	        }
 	        else {
 	          imprime_dec(decs.dec());   
@@ -76,9 +126,9 @@ public class Impresion {
 	    
 	    private static void imprime_insts(Insts insts) {
 	    	if (insts.tipo()==TNodo.varias_insts) {
-	    		imprime_insts(insts.insts());
-	    		System.out.print(";");
 	    		imprime_inst(insts.inst());
+	    		System.out.println(";");
+	    		imprime_insts(insts.insts());
 	    	}
 	    	else {
 	    		imprime_inst(insts.inst());
@@ -92,8 +142,8 @@ public class Impresion {
 	    }
 	    
 	    private static void imprime_dec(Dec dec) {
-	    	imprime_tipo(dec.nombreTipo());
-	       System.out.print("="+dec.variable());  
+	    imprime_tipo(dec.nombreTipo());
+	       System.out.print(" "+dec.variable());  
 	    }
 	    
 	    private static void imprime_tipo(NombreTipo tipo) {
@@ -130,6 +180,8 @@ public class Impresion {
 	        return exp.tipo() == TNodo.mul ||
 	               exp.tipo() == TNodo.div;
 	    }
+	    
+	    
 
 
 }

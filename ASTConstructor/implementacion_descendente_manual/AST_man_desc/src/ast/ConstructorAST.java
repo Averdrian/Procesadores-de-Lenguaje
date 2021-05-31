@@ -118,31 +118,31 @@ public class ConstructorAST {
 		return null;
 	}
 	private Insts Insts() {
-		switch(anticipo.clase()) {
-		case Variable:
-			Inst inst = Inst();
-			Insts insts = ReInsts();
-			if(insts == null) return sem.un_inst(inst);
-			return sem.varias_inst(insts, inst);
-		default:  errores.errorSintactico(anticipo.fila(),anticipo.columna(),anticipo.clase(),
-				ClaseLexica.Variable);                                    
-		}  
-		return null;
-	}
-	private Insts ReInsts() {
-		switch(anticipo.clase()) {
-		case PunCo:
-			empareja(ClaseLexica.PunCo);
-			Inst in = Inst();
-			Insts rein = ReInsts();
-			if(rein == null) return sem.un_inst(in);
-			return sem.varias_inst(rein, in);
-		case EOF: break;
-		default:  errores.errorSintactico(anticipo.fila(),anticipo.columna(),anticipo.clase(),
-				ClaseLexica.PunCo);                                    
-		} 
-		return null;
-	}
+        switch(anticipo.clase()) {
+        case Variable:
+            Inst inst = Inst();
+            Insts insts = ReInsts();
+            if(insts == null) return sem.un_inst(inst);
+            return sem.varias_inst(insts, inst);
+        default:  errores.errorSintactico(anticipo.fila(),anticipo.columna(),anticipo.clase(),
+                ClaseLexica.Variable);
+        }
+        return null;
+    }
+    private Insts ReInsts() {
+        switch(anticipo.clase()) {
+        case PunCo:
+            empareja(ClaseLexica.PunCo);
+            Inst in = Inst();
+            Insts rein = ReInsts();
+            if(rein == null) return sem.un_inst(in);
+            return sem.varias_inst(rein, in);
+        case EOF: break;
+        default:  errores.errorSintactico(anticipo.fila(),anticipo.columna(),anticipo.clase(),
+                ClaseLexica.PunCo);
+        } 
+        return null;
+    }
 	private Inst Inst() {
 		switch(anticipo.clase()) {
 		case Variable:
@@ -208,7 +208,7 @@ public class ConstructorAST {
 			String op = Op1();
 			Exp ex2 = Expr2();
 			Exp rex = ReExpr1(ex2);
-			return sem.Op(op, rex, ex2);
+			return sem.Op(op, exhe, rex);
 		case EOF: case PCie: case Sum: case Res: case PunCo:
 			return exhe;
 		default:  errores.errorSintactico(anticipo.fila(),anticipo.columna(),anticipo.clase(),
